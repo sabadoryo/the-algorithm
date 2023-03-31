@@ -31,7 +31,7 @@ import com.twitter.search.common.metrics.SearchTimerStats;
 import com.twitter.search.common.partitioning.base.Segment;
 import com.twitter.search.common.schema.base.ImmutableSchemaInterface;
 import com.twitter.search.common.schema.base.Schema;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.TimeMapper;
 import com.twitter.search.earlybird.common.config.EarlybirdConfig;
@@ -275,11 +275,11 @@ public class TweetCountMonitor extends OneTaskScheduledExecutorManager {
       TimeMapper timeMapper,
       Calendar cal,
       Map<Integer, MutableInt> newTweetCounts) {
-    DocIDToTweetIDMapper tweetIdMapper = reader.getSegmentData().getDocIDToTweetIDMapper();
+    DocIDTOTweetIDMapper tweetIdMapper = reader.getSegmentData().getDocIDTOTweetIDMapper();
     long dataEndTimeExclusiveMillis = getDataEndTimeExclusiveMillis(segmentInfo);
     int docsOutsideEndDateRange = 0;
     int docId = Integer.MIN_VALUE;
-    while ((docId = tweetIdMapper.getNextDocID(docId)) != DocIDToTweetIDMapper.ID_NOT_FOUND) {
+    while ((docId = tweetIdMapper.getNextDocID(docId)) != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
       UpdateCountType updateCountType =
           updateTweetCount(timeMapper, docId, dataEndTimeExclusiveMillis, cal, newTweetCounts);
       if (updateCountType == UpdateCountType.ILLEGAL_TIME) {

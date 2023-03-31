@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.collect.Sets;
 
 import com.twitter.search.common.schema.base.Schema;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 
 public class OptimizedDocValuesManager extends DocValuesManager {
   public OptimizedDocValuesManager(Schema schema, int segmentSize) {
@@ -15,8 +15,8 @@ public class OptimizedDocValuesManager extends DocValuesManager {
   }
 
   public OptimizedDocValuesManager(DocValuesManager docValuesManager,
-                                   DocIDToTweetIDMapper originalTweetIdMapper,
-                                   DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
+                                   DocIDTOTweetIDMapper originalTweetIdMapper,
+                                   DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
     super(docValuesManager.schema, docValuesManager.segmentSize);
     Set<ColumnStrideIntViewIndex> intViewIndexes = Sets.newHashSet();
     for (String fieldName : docValuesManager.columnStrideFields.keySet()) {
@@ -67,8 +67,8 @@ public class OptimizedDocValuesManager extends DocValuesManager {
   }
 
   @Override
-  public DocValuesManager optimize(DocIDToTweetIDMapper originalTweetIdMapper,
-                                   DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
+  public DocValuesManager optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
+                                   DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
     return this;
   }
 

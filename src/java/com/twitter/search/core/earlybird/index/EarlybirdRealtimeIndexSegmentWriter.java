@@ -120,13 +120,13 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
   @Override
   public int numDocsNoDelete() {
-    return segmentData.getDocIDToTweetIDMapper().getNumDocs();
+    return segmentData.getDocIDTOTweetIDMapper().getNumDocs();
   }
 
   @Override
   public void addDocument(Document doc) throws IOException {
     // This method should be called only from Expertsearch, not tweets Earlybirds.
-    DocIDToTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDToTweetIDMapper();
+    DocIDTOTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDTOTweetIDMapper();
     Preconditions.checkState(docIdToTweetIdMapper instanceof SequentialDocIDMapper);
 
     // Make sure we have space for a new doc in this segment.
@@ -138,7 +138,7 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
   @Override
   public void addTweet(Document doc, long tweetId, boolean docIsOffensive) throws IOException {
-    DocIDToTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDToTweetIDMapper();
+    DocIDTOTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDTOTweetIDMapper();
     Preconditions.checkState(!(docIdToTweetIdMapper instanceof SequentialDocIDMapper));
 
     // Make sure we have space for a new doc in this segment.
@@ -152,11 +152,11 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
     int docId = docIdToTweetIdMapper.addMapping(tweetId);
     // Make sure we successfully assigned a doc ID to the new document/tweet before proceeding.
-    // If the docId is DocIDToTweetIDMapper.ID_NOT_FOUND then either:
+    // If the docId is DocIDTOTweetIDMapper.ID_NOT_FOUND then either:
     //  1. the tweet is older than the  OutOfOrderRealtimeTweetIDMapper.segmentBoundaryTimestamp and
     //    is too old for this segment
     //  2. the OutOfOrderRealtimeTweetIDMapper does not have any available doc ids left
-    if (docId == DocIDToTweetIDMapper.ID_NOT_FOUND) {
+    if (docId == DocIDTOTweetIDMapper.ID_NOT_FOUND) {
       LOG.info("Could not assign doc id for tweet. Dropping tweet id " + tweetId
           + " for segment with timeslice: " + segmentData.getTimeSliceID());
       NUM_TWEETS_DROPPED.increment();
@@ -605,7 +605,7 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
   @Override
   public int numDocs() {
-    return segmentData.getDocIDToTweetIDMapper().getNumDocs();
+    return segmentData.getDocIDTOTweetIDMapper().getNumDocs();
   }
 
   public interface InvertedDocConsumer {

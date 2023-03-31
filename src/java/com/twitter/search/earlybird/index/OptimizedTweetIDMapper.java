@@ -6,7 +6,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
@@ -99,7 +99,7 @@ public class OptimizedTweetIDMapper extends TweetIDMapper {
   }
 
   @Override
-  public DocIDToTweetIDMapper optimize() {
+  public DocIDTOTweetIDMapper optimize() {
     throw new UnsupportedOperationException("OptimizedTweetIDMapper is already optimized.");
   }
 

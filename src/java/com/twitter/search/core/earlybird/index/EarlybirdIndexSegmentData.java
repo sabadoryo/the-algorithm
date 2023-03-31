@@ -92,7 +92,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
 
   private final DeletedDocs deletedDocs;
 
-  private final DocIDToTweetIDMapper docIdToTweetIdMapper;
+  private final DocIDTOTweetIDMapper docIdToTweetIdMapper;
   private final TimeMapper timeMapper;
 
   static LeafReader getLeafReaderFromOptimizedDirectory(Directory directory) throws IOException {
@@ -119,7 +119,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
       Map<String, FacetLabelProvider> facetLabelProviders,
       FacetIDMap facetIDMap,
       DeletedDocs deletedDocs,
-      DocIDToTweetIDMapper docIdToTweetIdMapper,
+      DocIDTOTweetIDMapper docIdToTweetIdMapper,
       TimeMapper timeMapper) {
     this.maxSegmentSize = maxSegmentSize;
     this.timeSliceID = timeSliceID;
@@ -149,7 +149,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
    */
   public abstract <S extends EarlybirdIndexExtensionsData> S getIndexExtensionsData();
 
-  public DocIDToTweetIDMapper getDocIDToTweetIDMapper() {
+  public DocIDTOTweetIDMapper getDocIDTOTweetIDMapper() {
     return docIdToTweetIdMapper;
   }
 
@@ -341,7 +341,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
         ConcurrentHashMap<String, InvertedIndex> perFieldMap,
         int maxSegmentSize,
         S indexExtension,
-        DocIDToTweetIDMapper docIdToTweetIdMapper,
+        DocIDTOTweetIDMapper docIdToTweetIdMapper,
         TimeMapper timeMapper,
         DataDeserializer in) throws IOException;
 
@@ -349,13 +349,13 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
 
     protected final Schema schema;
     protected final EarlybirdIndexExtensionsFactory indexExtensionsFactory;
-    private final Flushable.Handler<? extends DocIDToTweetIDMapper> docIdMapperFlushHandler;
+    private final Flushable.Handler<? extends DocIDTOTweetIDMapper> docIdMapperFlushHandler;
     private final Flushable.Handler<? extends TimeMapper> timeMapperFlushHandler;
 
     public AbstractSegmentDataFlushHandler(
         Schema schema,
         EarlybirdIndexExtensionsFactory indexExtensionsFactory,
-        Flushable.Handler<? extends DocIDToTweetIDMapper> docIdMapperFlushHandler,
+        Flushable.Handler<? extends DocIDTOTweetIDMapper> docIdMapperFlushHandler,
         Flushable.Handler<? extends TimeMapper> timeMapperFlushHandler) {
       super();
       this.schema = schema;
@@ -416,7 +416,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
     @Override
     protected EarlybirdIndexSegmentData doLoad(FlushInfo flushInfo, DataDeserializer in)
         throws IOException {
-      DocIDToTweetIDMapper docIdToTweetIdMapper = docIdMapperFlushHandler.load(
+      DocIDTOTweetIDMapper docIdToTweetIdMapper = docIdMapperFlushHandler.load(
           flushInfo.getSubProperties(DOC_ID_MAPPER_SUBPROPS_NAME), in);
 
       FlushInfo timeMapperFlushInfo = flushInfo.getSubProperties(TIME_MAPPER_SUBPROPS_NAME);

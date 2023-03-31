@@ -15,7 +15,7 @@ import org.apache.lucene.search.ScoreMode;
 import org.apache.lucene.search.Weight;
 
 import com.twitter.search.common.query.DefaultFilterWeight;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.util.AllDocsIterator;
 import com.twitter.search.core.earlybird.index.util.RangeFilterDISI;
@@ -123,7 +123,7 @@ public final class SinceMaxIDFilter extends Query {
         EarlybirdIndexSegmentAtomicReader twitterInMemoryIndexReader =
             (EarlybirdIndexSegmentAtomicReader) reader;
         TweetIDMapper tweetIdMapper =
-            (TweetIDMapper) twitterInMemoryIndexReader.getSegmentData().getDocIDToTweetIDMapper();
+            (TweetIDMapper) twitterInMemoryIndexReader.getSegmentData().getDocIDTOTweetIDMapper();
 
         // Important to return a null DocIdSetIterator here, so the Scorer will skip searching
         // this segment completely.
@@ -145,7 +145,7 @@ public final class SinceMaxIDFilter extends Query {
 
   @VisibleForTesting
   static class SinceMaxIDDocIdSetIterator extends RangeFilterDISI {
-    private final DocIDToTweetIDMapper docIdToTweetIdMapper;
+    private final DocIDTOTweetIDMapper docIdToTweetIdMapper;
     private final long sinceIdExclusive;
     private final long maxIdInclusive;
 
@@ -155,7 +155,7 @@ public final class SinceMaxIDFilter extends Query {
       super(reader,
             findMaxIdDocID(reader, maxIdInclusive),
             findSinceIdDocID(reader, sinceIdExclusive));
-      this.docIdToTweetIdMapper = reader.getSegmentData().getDocIDToTweetIDMapper();
+      this.docIdToTweetIdMapper = reader.getSegmentData().getDocIDTOTweetIDMapper();
       this.sinceIdExclusive = sinceIdExclusive;  // sinceStatusId == NO_FILTER is OK, it's exclusive
       this.maxIdInclusive = maxIdInclusive != NO_FILTER ? maxIdInclusive : Long.MAX_VALUE;
     }
@@ -175,7 +175,7 @@ public final class SinceMaxIDFilter extends Query {
     private static int findSinceIdDocID(
         EarlybirdIndexSegmentAtomicReader reader, long sinceIdExclusive) throws IOException {
       TweetIDMapper tweetIdMapper =
-          (TweetIDMapper) reader.getSegmentData().getDocIDToTweetIDMapper();
+          (TweetIDMapper) reader.getSegmentData().getDocIDTOTweetIDMapper();
       if (sinceIdExclusive != SinceMaxIDFilter.NO_FILTER) {
         // We use this as an upper bound on the search, so we want to find the highest possible
         // doc ID for this tweet ID.
@@ -186,14 +186,14 @@ public final class SinceMaxIDFilter extends Query {
             reader.getSmallestDocID(),
             reader.maxDoc() - 1);
       } else {
-        return DocIDToTweetIDMapper.ID_NOT_FOUND;
+        return DocIDTOTweetIDMapper.ID_NOT_FOUND;
       }
     }
 
     private static int findMaxIdDocID(
         EarlybirdIndexSegmentAtomicReader reader, long maxIdInclusive) throws IOException {
       TweetIDMapper tweetIdMapper =
-          (TweetIDMapper) reader.getSegmentData().getDocIDToTweetIDMapper();
+          (TweetIDMapper) reader.getSegmentData().getDocIDTOTweetIDMapper();
       if (maxIdInclusive != SinceMaxIDFilter.NO_FILTER) {
         // We use this as a lower bound on the search, so we want to find the lowest possible
         // doc ID for this tweet ID.
@@ -204,7 +204,7 @@ public final class SinceMaxIDFilter extends Query {
             reader.getSmallestDocID(),
             reader.maxDoc() - 1);
       } else {
-        return DocIDToTweetIDMapper.ID_NOT_FOUND;
+        return DocIDTOTweetIDMapper.ID_NOT_FOUND;
       }
     }
   }

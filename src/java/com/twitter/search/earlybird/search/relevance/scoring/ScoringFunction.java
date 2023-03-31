@@ -16,7 +16,7 @@ import com.twitter.search.common.relevance.features.EarlybirdDocumentFeatures;
 import com.twitter.search.common.results.thriftjava.FieldHitAttribution;
 import com.twitter.search.common.schema.base.ImmutableSchemaInterface;
 import com.twitter.search.common.schema.earlybird.EarlybirdFieldConstants.EarlybirdFieldConstant;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.TimeMapper;
 import com.twitter.search.earlybird.common.config.EarlybirdConfig;
@@ -53,7 +53,7 @@ public abstract class ScoringFunction {
   // and explain() methods, and the reader should only be updated by the setNextReader() method.
   private int currentDocID = -1;
 
-  protected DocIDToTweetIDMapper tweetIDMapper = null;
+  protected DocIDTOTweetIDMapper tweetIDMapper = null;
   protected TimeMapper timeMapper = null;
   protected EarlybirdDocumentFeatures documentFeatures;
 
@@ -77,7 +77,7 @@ public abstract class ScoringFunction {
    * searcher starts searching in a new segment.
    */
   public void setNextReader(EarlybirdIndexSegmentAtomicReader reader) throws IOException {
-    tweetIDMapper = reader.getSegmentData().getDocIDToTweetIDMapper();
+    tweetIDMapper = reader.getSegmentData().getDocIDTOTweetIDMapper();
     timeMapper = reader.getSegmentData().getTimeMapper();
     documentFeatures = new EarlybirdDocumentFeatures(reader);
     initializeNextSegment(reader);

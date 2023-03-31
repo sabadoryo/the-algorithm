@@ -115,7 +115,7 @@ public class EarlybirdMultiSegmentSearcher extends EarlybirdLuceneSearcher {
         segmentSearcher.getTwitterIndexReader().getSegmentData();
     if (idTimeRanges != null) {
       if (!SinceMaxIDFilter.sinceMaxIDsInRange(
-              (TweetIDMapper) segmentData.getDocIDToTweetIDMapper(),
+              (TweetIDMapper) segmentData.getDocIDTOTweetIDMapper(),
               idTimeRanges.getSinceIDExclusive().or(SinceMaxIDFilter.NO_FILTER),
               idTimeRanges.getMaxIDInclusive().or(SinceMaxIDFilter.NO_FILTER))
           || !SinceUntilFilter.sinceUntilTimesInRange(

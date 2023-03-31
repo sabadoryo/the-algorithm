@@ -303,7 +303,7 @@ public abstract class AbstractResultsCollector<R extends SearchRequestInfo,
 
     currTwitterReader = (EarlybirdIndexSegmentAtomicReader) reader;
     documentFeatures = new EarlybirdDocumentFeatures(currTwitterReader);
-    tweetIdMapper = (TweetIDMapper) currTwitterReader.getSegmentData().getDocIDToTweetIDMapper();
+    tweetIdMapper = (TweetIDMapper) currTwitterReader.getSegmentData().getDocIDTOTweetIDMapper();
     timeMapper = currTwitterReader.getSegmentData().getTimeMapper();
     currTimeSliceID = currTwitterReader.getSegmentData().getTimeSliceID();
     updateFirstSearchedStatusID();

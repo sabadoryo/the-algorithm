@@ -50,7 +50,7 @@ import com.twitter.search.common.schema.thriftjava.ThriftIndexingEventType;
 import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentData;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentWriter;
@@ -176,17 +176,17 @@ public class EarlybirdSegment {
 
   /**
    * Returns the smallest tweet ID in this segment. If the segment is not loaded yet, or is empty,
-   * DocIDToTweetIDMapper.ID_NOT_FOUND is returned (-1).
+   * DocIDTOTweetIDMapper.ID_NOT_FOUND is returned (-1).
    *
    * @return The smallest tweet ID in this segment.
    */
   public long getLowestTweetId() {
     EarlybirdIndexSegmentWriter segmentWriter = segmentWriterReference.get();
     if (segmentWriter == null) {
-      return DocIDToTweetIDMapper.ID_NOT_FOUND;
+      return DocIDTOTweetIDMapper.ID_NOT_FOUND;
     }
 
-    DocIDToTweetIDMapper mapper = segmentWriter.getSegmentData().getDocIDToTweetIDMapper();
+    DocIDTOTweetIDMapper mapper = segmentWriter.getSegmentData().getDocIDTOTweetIDMapper();
     int highestDocID = mapper.getPreviousDocID(Integer.MAX_VALUE);
     return mapper.getTweetID(highestDocID);
   }
@@ -213,17 +213,17 @@ public class EarlybirdSegment {
 
   /**
    * Returns the highest tweet ID in this segment. If the segment is not loaded yet, or is empty,
-   * DocIDToTweetIDMapper.ID_NOT_FOUND is returned (-1).
+   * DocIDTOTweetIDMapper.ID_NOT_FOUND is returned (-1).
    *
    * @return The highest tweet ID in this segment.
    */
   public long getHighestTweetId() {
     EarlybirdIndexSegmentWriter segmentWriter = segmentWriterReference.get();
     if (segmentWriter == null) {
-      return DocIDToTweetIDMapper.ID_NOT_FOUND;
+      return DocIDTOTweetIDMapper.ID_NOT_FOUND;
     }
 
-    DocIDToTweetIDMapper mapper = segmentWriter.getSegmentData().getDocIDToTweetIDMapper();
+    DocIDTOTweetIDMapper mapper = segmentWriter.getSegmentData().getDocIDTOTweetIDMapper();
     int lowestDocID = mapper.getNextDocID(-1);
     return mapper.getTweetID(lowestDocID);
   }
@@ -425,7 +425,7 @@ public class EarlybirdSegment {
       return -1;
     } else {
       TweetIDMapper tweetIDMapper =
-          (TweetIDMapper) segmentWriter.getSegmentData().getDocIDToTweetIDMapper();
+          (TweetIDMapper) segmentWriter.getSegmentData().getDocIDTOTweetIDMapper();
       return tweetIDMapper.getMaxTweetID();
     }
   }
@@ -583,9 +583,9 @@ public class EarlybirdSegment {
   }
 
   private void initHourlyTweetCounts(EarlybirdIndexSegmentWriter segmentWriter) {
-    DocIDToTweetIDMapper mapper = segmentWriter.getSegmentData().getDocIDToTweetIDMapper();
+    DocIDTOTweetIDMapper mapper = segmentWriter.getSegmentData().getDocIDTOTweetIDMapper();
     int docId = Integer.MIN_VALUE;
-    while ((docId = mapper.getNextDocID(docId)) != DocIDToTweetIDMapper.ID_NOT_FOUND) {
+    while ((docId = mapper.getNextDocID(docId)) != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
       incrementHourlyTweetCount(mapper.getTweetID(docId));
     }
   }
@@ -638,8 +638,8 @@ public class EarlybirdSegment {
       return false;
     }
 
-    return segmentWriter.getSegmentData().getDocIDToTweetIDMapper().getDocID(tweetID)
-        != DocIDToTweetIDMapper.ID_NOT_FOUND;
+    return segmentWriter.getSegmentData().getDocIDTOTweetIDMapper().getDocID(tweetID)
+        != DocIDTOTweetIDMapper.ID_NOT_FOUND;
   }
 
   private static final String VERSION_PROP_NAME = "version";

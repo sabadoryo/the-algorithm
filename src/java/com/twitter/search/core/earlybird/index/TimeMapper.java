@@ -75,6 +75,6 @@ public interface TimeMapper extends Flushable {
    * @param optimizedDocIdMapper The doc ID mapper used by this segment after it was optimized.
    * @return An optimized TimeMapper with the same tweet IDs.
    */
-  TimeMapper optimize(DocIDToTweetIDMapper originalDocIdMapper,
-                      DocIDToTweetIDMapper optimizedDocIdMapper) throws IOException;
+  TimeMapper optimize(DocIDTOTweetIDMapper originalDocIdMapper,
+                      DocIDTOTweetIDMapper optimizedDocIdMapper) throws IOException;
 }

@@ -15,7 +15,7 @@ import org.apache.lucene.search.Weight;
 
 import com.twitter.search.common.query.DefaultFilterWeight;
 import com.twitter.search.common.search.IntArrayDocIdSetIterator;
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentData;
 
@@ -35,12 +35,12 @@ public class TweetIDQuery extends Query {
       protected DocIdSetIterator getDocIdSetIterator(LeafReaderContext context) throws IOException {
         EarlybirdIndexSegmentData segmentData =
             ((EarlybirdIndexSegmentAtomicReader) context.reader()).getSegmentData();
-        DocIDToTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDToTweetIDMapper();
+        DocIDTOTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDTOTweetIDMapper();
 
         Set<Integer> set = Sets.newHashSet();
         for (long tweetID : tweetIDs) {
           int docID = docIdToTweetIdMapper.getDocID(tweetID);
-          if (docID != DocIDToTweetIDMapper.ID_NOT_FOUND) {
+          if (docID != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
             set.add(docID);
           }
         }

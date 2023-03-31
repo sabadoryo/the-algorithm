@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.apache.lucene.index.LeafReader;
 import org.apache.lucene.index.NumericDocValues;
 
-import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
 
 /**
  * Get an underlying data for a field by calling
@@ -57,8 +57,8 @@ public abstract class ColumnStrideFieldIndex {
    *         with possibly remapped doc IDs.
    */
   public ColumnStrideFieldIndex optimize(
-      DocIDToTweetIDMapper originalTweetIdMapper,
-      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
+      DocIDTOTweetIDMapper originalTweetIdMapper,
+      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
     return this;
   }
 }
