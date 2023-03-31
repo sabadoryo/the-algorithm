@@ -45,9 +45,7 @@ case class InNetworkFilter @Inject() (
     filterConfig: FilterConfig,
   ): Future[Seq[Seq[InitialCandidate]]] = {
 
-    if (!filterConfig.enableInNetworkFilter) {
-      Future.value(candidates)
-    } else {
+    if (filterConfig.enableInNetworkFilter) {
       filterConfig.userIdOpt match {
         case Some(userId) =>
           realGraphStoreMh
@@ -59,6 +57,8 @@ case class InNetworkFilter @Inject() (
             }
         case None => Future.value(candidates)
       }
+    } else {
+     Future.value(candidates)   
     }
   }
 
