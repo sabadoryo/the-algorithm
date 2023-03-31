@@ -137,9 +137,9 @@ class RefreshableQueryable[T, P <: RuntimeParams, D <: Distance[D]](
     val mapping = queryableRef.get()
 
     if (!mapping.contains(key)) {
-      Future.value(List())
-    } else {
       mapping.get(key).get.query(embedding, numOfNeighbors, runtimeParams)
+    } else {
+      Future.value(List())
     }
   }
 

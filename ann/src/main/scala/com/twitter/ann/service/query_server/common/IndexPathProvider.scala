@@ -130,7 +130,9 @@ abstract class BaseIndexPathProvider extends IndexPathProvider {
   ): Try[AbstractFile] = {
     Try {
       val latestValidPath = findLatestTimeStampValidSuccessDirectory(rootPath, group)
-      if (!group) {
+      if (group) {
+        latestIndexTimestamp.set(latestValidPath.getName.toFloat)
+      } else {
         val latestPath = PathUtils.findLatestTimeStampSuccessDirectory(rootPath)
         // since latestValidPath does not throw exception, latestPath must exist
         assert(latestPath.isPresent)
@@ -143,8 +145,6 @@ abstract class BaseIndexPathProvider extends IndexPathProvider {
         if (latestPath.get() != latestValidPath) {
           invalidPathCounter.incr()
         }
-      } else {
-        latestIndexTimestamp.set(latestValidPath.getName.toFloat)
       }
       latestValidIndexTimestamp.set(latestValidPath.getName.toFloat)
       latestValidPath
