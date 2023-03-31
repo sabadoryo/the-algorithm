@@ -51,7 +51,7 @@ public class UserScrubGeoFilter implements FilteredQuery.DocIdFilterFactory {
     final EarlybirdIndexSegmentAtomicReader currTwitterReader =
         (EarlybirdIndexSegmentAtomicReader) context.reader();
     final TweetIDMapper tweetIdMapper =
-        (TweetIDMapper) currTwitterReader.getSegmentData().getDocIDTOTweetIDMapper();
+        (TweetIDMapper) currTwitterReader.getSegmentData().getDocIDToTweetIDMapper();
     final NumericDocValues fromUserIdDocValues = currTwitterReader.getNumericDocValues(
         EarlybirdFieldConstant.FROM_USER_ID_CSF.getFieldName());
     return (docId) -> fromUserIdDocValues.advanceExact(docId)

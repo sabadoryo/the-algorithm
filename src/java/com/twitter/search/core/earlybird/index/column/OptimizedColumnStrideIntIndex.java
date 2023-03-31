@@ -6,7 +6,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 public class OptimizedColumnStrideIntIndex extends ColumnStrideFieldIndex implements Flushable {
   private final int[] values;
@@ -18,14 +18,14 @@ public class OptimizedColumnStrideIntIndex extends ColumnStrideFieldIndex implem
 
   public OptimizedColumnStrideIntIndex(
       ColumnStrideIntIndex columnStrideIntIndex,
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     super(columnStrideIntIndex.getName());
     int maxDocId = optimizedTweetIdMapper.getPreviousDocID(Integer.MAX_VALUE);
     values = new int[maxDocId + 1];
 
     int docId = optimizedTweetIdMapper.getNextDocID(Integer.MIN_VALUE);
-    while (docId != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    while (docId != DocIDToTweetIDMapper.ID_NOT_FOUND) {
       int originalDocId = originalTweetIdMapper.getDocID(optimizedTweetIdMapper.getTweetID(docId));
       setValue(docId, columnStrideIntIndex.get(originalDocId));
       docId = optimizedTweetIdMapper.getNextDocID(docId);

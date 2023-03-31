@@ -35,7 +35,7 @@ import com.twitter.search.common.search.TwitterIndexSearcher;
 import com.twitter.search.common.util.analysis.LongTermAttributeImpl;
 import com.twitter.search.common.util.lang.ThriftLanguageUtil;
 import com.twitter.search.core.earlybird.facets.FacetLabelProvider;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentData;
 import com.twitter.search.earlybird.EarlybirdSearcher;
@@ -177,7 +177,7 @@ public class EarlybirdSingleSegmentSearcher extends EarlybirdLuceneSearcher {
     EarlybirdIndexSegmentData segmentData = twitterReader.getSegmentData();
     collector.resetFacetLabelProviders(
         segmentData.getFacetLabelProviders(), segmentData.getFacetIDMap());
-    DocIDTOTweetIDMapper docIdMapper = segmentData.getDocIDTOTweetIDMapper();
+    DocIDToTweetIDMapper docIdMapper = segmentData.getDocIDToTweetIDMapper();
     for (ThriftSearchResult result : searchResults.getResults()) {
       int docId = docIdMapper.getDocID(result.getId());
       if (docId < 0) {
@@ -209,7 +209,7 @@ public class EarlybirdSingleSegmentSearcher extends EarlybirdLuceneSearcher {
     Weight weight =
         createWeight(rewrite(searchRequestInfo.getLuceneQuery()), ScoreMode.COMPLETE, 1.0f);
 
-    DocIDTOTweetIDMapper docIdMapper = twitterReader.getSegmentData().getDocIDTOTweetIDMapper();
+    DocIDToTweetIDMapper docIdMapper = twitterReader.getSegmentData().getDocIDToTweetIDMapper();
     for (int i = 0; i < hits.numHits(); i++) {
       final Hit hit = hits.getHit(i);
       Preconditions.checkState(hit.getTimeSliceID() == timeSliceID,
@@ -221,7 +221,7 @@ public class EarlybirdSingleSegmentSearcher extends EarlybirdLuceneSearcher {
       }
 
       final int docIdToExplain = docIdMapper.getDocID(hit.getStatusID());
-      if (docIdToExplain == DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+      if (docIdToExplain == DocIDToTweetIDMapper.ID_NOT_FOUND) {
         result.getMetadata().setExplanation(
             "ERROR: Could not find doc ID to explain for " + hit.toString());
       } else {
@@ -313,7 +313,7 @@ public class EarlybirdSingleSegmentSearcher extends EarlybirdLuceneSearcher {
                                 FacetLabelProvider.FacetLabelAccessor photoAccessor,
                                 byte debugMode) throws IOException {
     boolean isTwimg = term.field().equals(EarlybirdFieldConstant.TWIMG_LINKS_FIELD.getFieldName());
-    int internalDocID = DocIDTOTweetIDMapper.ID_NOT_FOUND;
+    int internalDocID = DocIDToTweetIDMapper.ID_NOT_FOUND;
     long statusID = -1;
     long userID = -1;
     Term facetTerm = term;
@@ -325,10 +325,10 @@ public class EarlybirdSingleSegmentSearcher extends EarlybirdLuceneSearcher {
           LongTermAttributeImpl.copyIntoNewBytesRef(userID));
     } else if (isTwimg) {
       statusID = Long.parseLong(term.text());
-      internalDocID = twitterReader.getSegmentData().getDocIDTOTweetIDMapper().getDocID(statusID);
+      internalDocID = twitterReader.getSegmentData().getDocIDToTweetIDMapper().getDocID(statusID);
     }
 
-    if (internalDocID == DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    if (internalDocID == DocIDToTweetIDMapper.ID_NOT_FOUND) {
       // If this is not a twimg, this is how statusID should be looked up
       //
       // If this is a twimg but we couldn't find the internalDocID, that means this segment,
@@ -337,7 +337,7 @@ public class EarlybirdSingleSegmentSearcher extends EarlybirdLuceneSearcher {
       internalDocID = twitterReader.getOldestDocID(facetTerm);
       if (internalDocID >= 0) {
         statusID =
-            twitterReader.getSegmentData().getDocIDTOTweetIDMapper().getTweetID(internalDocID);
+            twitterReader.getSegmentData().getDocIDToTweetIDMapper().getTweetID(internalDocID);
       } else {
         statusID = -1;
       }

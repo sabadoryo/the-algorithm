@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.twitter.search.common.schema.base.Schema;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.inverted.IntBlockPool;
 
@@ -62,8 +62,8 @@ public abstract class AbstractFacetCountingArray implements Flushable {
     @Override
     public final AbstractFacetCountingArray rewriteAndMapIDs(
         Map<Integer, int[]> termIDMapper,
-        DocIDTOTweetIDMapper originalTweetIdMapper,
-        DocIDTOTweetIDMapper optimizedTweetIdMapper) {
+        DocIDToTweetIDMapper originalTweetIdMapper,
+        DocIDToTweetIDMapper optimizedTweetIdMapper) {
       return this;
     }
 
@@ -222,8 +222,8 @@ public abstract class AbstractFacetCountingArray implements Flushable {
    */
   public abstract AbstractFacetCountingArray rewriteAndMapIDs(
       Map<Integer, int[]> termIDMapper,
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException;
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException;
 
   IntBlockPool getFacetsPool() {
     return facetsPool;

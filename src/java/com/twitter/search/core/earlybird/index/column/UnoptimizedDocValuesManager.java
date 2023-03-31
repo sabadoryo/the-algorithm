@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.twitter.search.common.schema.base.Schema;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 public class UnoptimizedDocValuesManager extends DocValuesManager {
   public UnoptimizedDocValuesManager(Schema schema, int segmentSize) {
@@ -39,8 +39,8 @@ public class UnoptimizedDocValuesManager extends DocValuesManager {
   }
 
   @Override
-  public DocValuesManager optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
-                                   DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+  public DocValuesManager optimize(DocIDToTweetIDMapper originalTweetIdMapper,
+                                   DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     return new OptimizedDocValuesManager(this, originalTweetIdMapper, optimizedTweetIdMapper);
   }
 

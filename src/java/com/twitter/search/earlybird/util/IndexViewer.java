@@ -30,7 +30,7 @@ import com.twitter.search.common.util.analysis.IntTermAttributeImpl;
 import com.twitter.search.common.util.analysis.LongTermAttributeImpl;
 import com.twitter.search.common.util.analysis.SortableLongTermAttributeImpl;
 import com.twitter.search.common.util.spatial.GeoUtil;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 import com.twitter.search.core.earlybird.index.inverted.MPHTermDictionary;
 import com.twitter.search.core.earlybird.index.inverted.RealtimeIndexTerms;
@@ -200,7 +200,7 @@ public class IndexViewer {
    */
   public void dumpTweetDataByTweetId(ViewerWriter writer, long tweetId, Options options)
       throws IOException {
-    int docId = twitterReader.getSegmentData().getDocIDTOTweetIDMapper().getDocID(tweetId);
+    int docId = twitterReader.getSegmentData().getDocIDToTweetIDMapper().getDocID(tweetId);
     dumpTweetDataByDocId(writer, docId, options);
   }
 
@@ -214,7 +214,7 @@ public class IndexViewer {
     writer.beginObject();
 
     printHeader(writer);
-    long tweetID = twitterReader.getSegmentData().getDocIDTOTweetIDMapper().getTweetID(docId);
+    long tweetID = twitterReader.getSegmentData().getDocIDToTweetIDMapper().getTweetID(docId);
     if (docId < twitterReader.maxDoc() && tweetID >= 0) {
       writer.name("docId").value(Integer.toString(docId));
       writer.name("tweetId").value(Long.toString(tweetID));
@@ -237,9 +237,9 @@ public class IndexViewer {
   }
 
   private void writeTweetIdsToLogFile(PrintWriter logWriter) {
-    DocIDTOTweetIDMapper mapper = twitterReader.getSegmentData().getDocIDTOTweetIDMapper();
+    DocIDToTweetIDMapper mapper = twitterReader.getSegmentData().getDocIDToTweetIDMapper();
     int docId = Integer.MIN_VALUE;
-    while ((docId = mapper.getNextDocID(docId)) != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    while ((docId = mapper.getNextDocID(docId)) != DocIDToTweetIDMapper.ID_NOT_FOUND) {
       long tweetId = mapper.getTweetID(docId);
 
       // Ensure tweet ID is valid and non-deleted
@@ -638,7 +638,7 @@ public class IndexViewer {
     int docsReturned = 0;
     int docId;
     boolean endedEarly = false;
-    DocIDTOTweetIDMapper mapper = twitterReader.getSegmentData().getDocIDTOTweetIDMapper();
+    DocIDToTweetIDMapper mapper = twitterReader.getSegmentData().getDocIDToTweetIDMapper();
     while ((docId = docs.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) {
       if (docsReturned < maxDocs) {
         docsReturned++;
@@ -752,7 +752,7 @@ public class IndexViewer {
     writer.beginObject();
     printHeader(writer);
     writer.name("tweetId").value(Long.toString(tweetId));
-    int docId = twitterReader.getSegmentData().getDocIDTOTweetIDMapper().getDocID(tweetId);
+    int docId = twitterReader.getSegmentData().getDocIDToTweetIDMapper().getDocID(tweetId);
 
     writer.name("docId").value(Integer.toString(docId));
     writer.endObject();
@@ -768,7 +768,7 @@ public class IndexViewer {
   public void dumpDocIdToTweetIdMapping(ViewerWriter writer, int docid) throws IOException {
     writer.beginObject();
     printHeader(writer);
-    long tweetId = twitterReader.getSegmentData().getDocIDTOTweetIDMapper().getTweetID(docid);
+    long tweetId = twitterReader.getSegmentData().getDocIDToTweetIDMapper().getTweetID(docid);
 
     writer.name("tweetId");
     if (tweetId >= 0) {

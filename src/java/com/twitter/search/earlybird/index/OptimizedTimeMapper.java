@@ -9,7 +9,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.TimeMapper;
 import com.twitter.search.core.earlybird.index.inverted.IntBlockPool;
 
@@ -22,17 +22,17 @@ public class OptimizedTimeMapper extends AbstractInMemoryTimeMapper implements F
 
   // Size must be greater than the max doc ID stored in the optimized tweet ID mapper.
   public OptimizedTimeMapper(RealtimeTimeMapper realtimeTimeMapper,
-                             DocIDTOTweetIDMapper originalTweetIdMapper,
-                             DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+                             DocIDToTweetIDMapper originalTweetIdMapper,
+                             DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     super();
     int maxDocId = optimizedTweetIdMapper.getPreviousDocID(Integer.MAX_VALUE);
     timeMap = new int[maxDocId + 1];
     Arrays.fill(timeMap, ILLEGAL_TIME);
 
     int docId = maxDocId;
-    while (docId != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    while (docId != DocIDToTweetIDMapper.ID_NOT_FOUND) {
       int originalDocId = originalTweetIdMapper.getDocID(optimizedTweetIdMapper.getTweetID(docId));
-      Preconditions.checkState(originalDocId != DocIDTOTweetIDMapper.ID_NOT_FOUND);
+      Preconditions.checkState(originalDocId != DocIDToTweetIDMapper.ID_NOT_FOUND);
 
       int docIdTimestamp = realtimeTimeMapper.getTime(originalDocId);
       Preconditions.checkState(docIdTimestamp != TimeMapper.ILLEGAL_TIME);
@@ -102,8 +102,8 @@ public class OptimizedTimeMapper extends AbstractInMemoryTimeMapper implements F
   }
 
   @Override
-  public TimeMapper optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
-                             DocIDTOTweetIDMapper optimizedTweetIdMapper) {
+  public TimeMapper optimize(DocIDToTweetIDMapper originalTweetIdMapper,
+                             DocIDToTweetIDMapper optimizedTweetIdMapper) {
     throw new UnsupportedOperationException("OptimizedTimeMapper instances are already optimized.");
   }
 }

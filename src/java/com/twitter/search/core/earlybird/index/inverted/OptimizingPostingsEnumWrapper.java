@@ -12,13 +12,13 @@ import com.google.common.collect.Maps;
 import org.apache.lucene.index.PostingsEnum;
 import org.apache.lucene.util.BytesRef;
 
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 /**
- * A PostingsEnum that maps doc IDs in one DocIDTOTweetIDMapper instance to doc IDs in another
- * DocIDTOTweetIDMapper.
+ * A PostingsEnum that maps doc IDs in one DocIDToTweetIDMapper instance to doc IDs in another
+ * DocIDToTweetIDMapper.
  *
- * Unoptimized segments can use any DocIDTOTweetIDMapper they want, which means that there are no
+ * Unoptimized segments can use any DocIDToTweetIDMapper they want, which means that there are no
  * guarantees on the distribution of the doc IDs in this mapper. However, optimized segments must
  * use an OptimizedTweetIDMapper: we want to assign sequential doc IDs and use delta encondings in
  * order to save space. So when an Earlybird segment needs to be optimized, we might need to convert
@@ -37,13 +37,13 @@ public class OptimizingPostingsEnumWrapper extends PostingsEnum {
   private int positionIndex = -1;
 
   public OptimizingPostingsEnumWrapper(PostingsEnum source,
-                                       DocIDTOTweetIDMapper originalTweetIdMapper,
-                                       DocIDTOTweetIDMapper newTweetIdMapper) throws IOException {
+                                       DocIDToTweetIDMapper originalTweetIdMapper,
+                                       DocIDToTweetIDMapper newTweetIdMapper) throws IOException {
     int docId;
     while ((docId = source.nextDoc()) != NO_MORE_DOCS) {
       long tweetId = originalTweetIdMapper.getTweetID(docId);
       int newDocId = newTweetIdMapper.getDocID(tweetId);
-      Preconditions.checkState(newDocId != DocIDTOTweetIDMapper.ID_NOT_FOUND,
+      Preconditions.checkState(newDocId != DocIDToTweetIDMapper.ID_NOT_FOUND,
           "Did not find a mapping in the new tweet ID mapper for tweet ID %s, doc ID %s",
           tweetId, docId);
 

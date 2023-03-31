@@ -3,7 +3,7 @@ package com.twitter.search.core.earlybird.index.column;
 import com.twitter.search.common.encoding.features.IntegerEncodedFeatures;
 import com.twitter.search.common.schema.base.FeatureConfiguration;
 import com.twitter.search.common.schema.base.Schema;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 /**
  * An Int CSF view on top of an {@link AbstractColumnStrideMultiIntIndex}.
@@ -64,7 +64,7 @@ public class ColumnStrideIntViewIndex extends ColumnStrideFieldIndex {
 
   @Override
   public ColumnStrideFieldIndex optimize(
-      DocIDTOTweetIDMapper originalTweetIdMapper, DocIDTOTweetIDMapper optimizedTweetIdMapper) {
+      DocIDToTweetIDMapper originalTweetIdMapper, DocIDToTweetIDMapper optimizedTweetIdMapper) {
     throw new UnsupportedOperationException(
         "ColumnStrideIntViewIndex instances do not support optimization");
   }

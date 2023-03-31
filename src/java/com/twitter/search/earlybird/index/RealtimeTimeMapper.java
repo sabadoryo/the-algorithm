@@ -9,7 +9,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.TimeMapper;
 import com.twitter.search.core.earlybird.index.inverted.IntBlockPool;
 
@@ -47,8 +47,8 @@ public class RealtimeTimeMapper extends AbstractInMemoryTimeMapper {
   }
 
   @Override
-  public TimeMapper optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
-                             DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+  public TimeMapper optimize(DocIDToTweetIDMapper originalTweetIdMapper,
+                             DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     return new OptimizedTimeMapper(this, originalTweetIdMapper, optimizedTweetIdMapper);
   }
 

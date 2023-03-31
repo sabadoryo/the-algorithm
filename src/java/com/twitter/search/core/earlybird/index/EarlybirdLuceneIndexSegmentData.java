@@ -41,7 +41,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
       int maxSegmentSize,
       long timeSliceID,
       Schema schema,
-      DocIDTOTweetIDMapper docIdToTweetIdMapper,
+      DocIDToTweetIDMapper DocIDToTweetIDMapper,
       TimeMapper timeMapper,
       EarlybirdIndexExtensionsFactory indexExtensionsFactory) {
     this(
@@ -54,7 +54,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
         new ConcurrentHashMap<>(),
         AbstractFacetCountingArray.EMPTY_ARRAY,
         new OptimizedDocValuesManager(schema, maxSegmentSize),
-        docIdToTweetIdMapper,
+        DocIDToTweetIDMapper,
         timeMapper,
         indexExtensionsFactory == null
             ? null : indexExtensionsFactory.newLuceneIndexExtensionsData());
@@ -70,7 +70,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
       ConcurrentHashMap<String, InvertedIndex> perFieldMap,
       AbstractFacetCountingArray facetCountingArray,
       DocValuesManager docValuesManager,
-      DocIDTOTweetIDMapper docIdToTweetIdMapper,
+      DocIDToTweetIDMapper DocIDToTweetIDMapper,
       TimeMapper timeMapper,
       EarlybirdIndexExtensionsData indexExtension) {
     super(maxSegmentSize,
@@ -85,7 +85,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
           null, // facetLabelProviders
           null, // facetIDMap
           DeletedDocs.NO_DELETES,
-          docIdToTweetIdMapper,
+          DocIDToTweetIDMapper,
           timeMapper);
     this.directory = directory;
     this.indexExtension = indexExtension;
@@ -154,7 +154,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
         Schema schema,
         Directory directory,
         EarlybirdIndexExtensionsFactory indexExtensionsFactory,
-        Flushable.Handler<? extends DocIDTOTweetIDMapper> docIdMapperFlushHandler,
+        Flushable.Handler<? extends DocIDToTweetIDMapper> docIdMapperFlushHandler,
         Flushable.Handler<? extends TimeMapper> timeMapperFlushHandler) {
       super(schema, indexExtensionsFactory, docIdMapperFlushHandler, timeMapperFlushHandler);
       this.directory = directory;
@@ -176,7 +176,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
         ConcurrentHashMap<String, InvertedIndex> perFieldMap,
         int maxSegmentSize,
         EarlybirdIndexExtensionsData indexExtension,
-        DocIDTOTweetIDMapper docIdToTweetIdMapper,
+        DocIDToTweetIDMapper DocIDToTweetIDMapper,
         TimeMapper timeMapper,
         DataDeserializer in) {
       return new EarlybirdLuceneIndexSegmentData(
@@ -189,7 +189,7 @@ public final class EarlybirdLuceneIndexSegmentData extends EarlybirdIndexSegment
           perFieldMap,
           AbstractFacetCountingArray.EMPTY_ARRAY,
           new OptimizedDocValuesManager(schema, maxSegmentSize),
-          docIdToTweetIdMapper,
+          DocIDToTweetIDMapper,
           timeMapper,
           indexExtension);
     }

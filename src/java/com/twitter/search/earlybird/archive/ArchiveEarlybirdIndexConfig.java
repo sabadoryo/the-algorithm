@@ -68,7 +68,7 @@ public abstract class ArchiveEarlybirdIndexConfig extends EarlybirdIndexConfig {
         new ConcurrentHashMap<>(data.getPerFieldMap()),
         data.getFacetCountingArray(),
         data.getDocValuesManager(),
-        data.getDocIDTOTweetIDMapper(),
+        data.getDocIDToTweetIDMapper(),
         data.getTimeMapper(),
         data.getIndexExtensionsData());
   }

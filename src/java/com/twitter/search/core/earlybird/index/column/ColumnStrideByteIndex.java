@@ -6,7 +6,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 import it.unimi.dsi.fastutil.ints.Int2ByteOpenHashMap;
 
@@ -38,8 +38,8 @@ public class ColumnStrideByteIndex extends ColumnStrideFieldIndex implements Flu
 
   @Override
   public ColumnStrideFieldIndex optimize(
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     return new OptimizedColumnStrideByteIndex(this, originalTweetIdMapper, optimizedTweetIdMapper);
   }
 

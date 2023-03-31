@@ -16,7 +16,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 public abstract class DocValuesManager implements Flushable {
   protected final Schema schema;
@@ -45,8 +45,8 @@ public abstract class DocValuesManager implements Flushable {
    * encoding for doc values (but that we can't add new doc IDs to).
    */
   public abstract DocValuesManager optimize(
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException;
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException;
 
   public Set<String> getDocValueNames() {
     return columnStrideFields.keySet();

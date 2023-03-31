@@ -4,7 +4,7 @@ package com.twitter.search.core.earlybird.index;
  * A doc ID mapper that assigns doc IDs sequentially in decreasing order, starting with the given
  * max ID. Used by Expertsearch, which doesn't index tweets.
  */
-public class SequentialDocIDMapper implements DocIDTOTweetIDMapper {
+public class SequentialDocIDMapper implements DocIDToTweetIDMapper {
   private final int maxSegmentSize;
   private int lastAssignedDocId;
 
@@ -80,8 +80,8 @@ public class SequentialDocIDMapper implements DocIDTOTweetIDMapper {
   }
 
   @Override
-  public DocIDTOTweetIDMapper optimize() {
-    // Segments that use this DocIDTOTweetIDMapper should never be optimized.
+  public DocIDToTweetIDMapper optimize() {
+    // Segments that use this DocIDToTweetIDMapper should never be optimized.
     throw new UnsupportedOperationException("SequentialDocIDMapper cannot be optimized.");
   }
 }

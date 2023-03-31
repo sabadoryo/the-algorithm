@@ -8,7 +8,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.inverted.IntBlockPool;
 
 public class OptimizedFacetCountingArray extends AbstractFacetCountingArray {
@@ -41,8 +41,8 @@ public class OptimizedFacetCountingArray extends AbstractFacetCountingArray {
   @Override
   public AbstractFacetCountingArray rewriteAndMapIDs(
       Map<Integer, int[]> termIDMapper,
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) {
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) {
     throw new UnsupportedOperationException(
         "OptimizedFacetCountingArray instances should never be rewritten.");
   }

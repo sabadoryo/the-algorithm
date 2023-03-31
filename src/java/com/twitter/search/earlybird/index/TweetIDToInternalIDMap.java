@@ -8,7 +8,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 public final class TweetIDToInternalIDMap implements Flushable {
   private final int   size;
@@ -31,7 +31,7 @@ public final class TweetIDToInternalIDMap implements Flushable {
 
   TweetIDToInternalIDMap(final int size) {
     this.hash = new int[size];
-    Arrays.fill(hash, DocIDTOTweetIDMapper.ID_NOT_FOUND);
+    Arrays.fill(hash, DocIDToTweetIDMapper.ID_NOT_FOUND);
     this.size = size;
     this.halfSize = size >> 1;
     this.mask = size - 1;
@@ -67,16 +67,16 @@ public final class TweetIDToInternalIDMap implements Flushable {
     int value = hash[hashPos];
     assert inverseMap[internalID] == tweetID;
 
-    if (value != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    if (value != DocIDToTweetIDMapper.ID_NOT_FOUND) {
       final int inc = incrementHashCode(code);
       do {
         code += inc;
         hashPos = hashPos(code);
         value = hash[hashPos];
-      } while (value != DocIDTOTweetIDMapper.ID_NOT_FOUND);
+      } while (value != DocIDToTweetIDMapper.ID_NOT_FOUND);
     }
 
-    assert value == DocIDTOTweetIDMapper.ID_NOT_FOUND;
+    assert value == DocIDToTweetIDMapper.ID_NOT_FOUND;
 
     hash[hashPos] = internalID;
     numMappings++;
@@ -94,18 +94,18 @@ public final class TweetIDToInternalIDMap implements Flushable {
     int hashPos = hashPos(code);
     int value = hash[hashPos];
 
-    if (value != DocIDTOTweetIDMapper.ID_NOT_FOUND && inverseMap[value] != tweetID) {
+    if (value != DocIDToTweetIDMapper.ID_NOT_FOUND && inverseMap[value] != tweetID) {
       final int inc = incrementHashCode(code);
 
       do {
         code += inc;
         hashPos = hashPos(code);
         value = hash[hashPos];
-      } while (value != DocIDTOTweetIDMapper.ID_NOT_FOUND && inverseMap[value] != tweetID);
+      } while (value != DocIDToTweetIDMapper.ID_NOT_FOUND && inverseMap[value] != tweetID);
     }
 
     if (hashPos == -1) {
-      return DocIDTOTweetIDMapper.ID_NOT_FOUND;
+      return DocIDToTweetIDMapper.ID_NOT_FOUND;
     }
     return hash[hashPos];
   }

@@ -26,7 +26,7 @@ import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
 import com.twitter.search.core.earlybird.facets.FacetIDMap.FacetField;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdIndexSegmentAtomicReader;
 
 public class OptimizedMemoryIndex extends InvertedIndex implements Flushable {
@@ -73,8 +73,8 @@ public class OptimizedMemoryIndex extends InvertedIndex implements Flushable {
       InvertedRealtimeIndex source,
       Map<Integer, int[]> termIDMapper,
       FacetField facetField,
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     super(fieldType);
 
     numDocs = source.getNumDocs();

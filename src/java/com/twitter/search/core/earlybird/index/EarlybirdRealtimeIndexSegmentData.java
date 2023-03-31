@@ -46,7 +46,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
       int maxSegmentSize,
       long timeSliceID,
       Schema schema,
-      DocIDTOTweetIDMapper docIdToTweetIdMapper,
+      DocIDToTweetIDMapper DocIDToTweetIDMapper,
       TimeMapper timeMapper,
       EarlybirdIndexExtensionsFactory indexExtensionsFactory) {
     this(
@@ -61,7 +61,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
         Maps.newHashMapWithExpectedSize(schema.getNumFacetFields()),
         FacetIDMap.build(schema),
         new DeletedDocs.Default(maxSegmentSize),
-        docIdToTweetIdMapper,
+        DocIDToTweetIDMapper,
         timeMapper,
         indexExtensionsFactory == null
             ? null
@@ -86,7 +86,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
       Map<String, FacetLabelProvider> facetLabelProviders,
       FacetIDMap facetIDMap,
       DeletedDocs deletedDocs,
-      DocIDTOTweetIDMapper docIdToTweetIdMapper,
+      DocIDToTweetIDMapper DocIDToTweetIDMapper,
       TimeMapper timeMapper,
       EarlybirdRealtimeIndexExtensionsData indexExtension) {
     super(maxSegmentSize,
@@ -101,7 +101,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
           facetLabelProviders,
           facetIDMap,
           deletedDocs,
-          docIdToTweetIdMapper,
+          DocIDToTweetIDMapper,
           timeMapper);
     this.indexExtension = indexExtension;
     this.facetDocValueSet = null;
@@ -173,7 +173,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
     public InMemorySegmentDataFlushHandler(
         Schema schema,
         EarlybirdIndexExtensionsFactory factory,
-        Flushable.Handler<? extends DocIDTOTweetIDMapper> docIdMapperFlushHandler,
+        Flushable.Handler<? extends DocIDToTweetIDMapper> docIdMapperFlushHandler,
         Flushable.Handler<? extends TimeMapper> timeMapperFlushHandler) {
       super(schema, factory, docIdMapperFlushHandler, timeMapperFlushHandler);
     }
@@ -208,7 +208,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
         ConcurrentHashMap<String, InvertedIndex> perFieldMap,
         int maxSegmentSize,
         EarlybirdRealtimeIndexExtensionsData indexExtension,
-        DocIDTOTweetIDMapper docIdToTweetIdMapper,
+        DocIDToTweetIDMapper DocIDToTweetIDMapper,
         TimeMapper timeMapper,
         DataDeserializer in) throws IOException {
       boolean isOptimized = flushInfo.getBooleanProperty(IS_OPTIMIZED_PROP_NAME);
@@ -243,7 +243,7 @@ public class EarlybirdRealtimeIndexSegmentData extends EarlybirdIndexSegmentData
           FacetUtil.getFacetLabelProviders(schema, perFieldMap),
           facetIDMap,
           deletedDocs,
-          docIdToTweetIdMapper,
+          DocIDToTweetIDMapper,
           timeMapper,
           indexExtension);
     }

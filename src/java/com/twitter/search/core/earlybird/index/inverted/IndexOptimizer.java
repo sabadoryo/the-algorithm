@@ -19,7 +19,7 @@ import com.twitter.search.common.schema.base.Schema;
 import com.twitter.search.core.earlybird.facets.AbstractFacetCountingArray;
 import com.twitter.search.core.earlybird.facets.FacetLabelProvider;
 import com.twitter.search.core.earlybird.facets.FacetUtil;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.EarlybirdRealtimeIndexSegmentData;
 import com.twitter.search.core.earlybird.index.TimeMapper;
 import com.twitter.search.core.earlybird.index.column.DocValuesManager;
@@ -43,8 +43,8 @@ public final class IndexOptimizer {
 
     LOG.info("Optimize doc id mapper.");
     // Optimize the doc ID mapper first.
-    DocIDTOTweetIDMapper originalTweetIdMapper = source.getDocIDTOTweetIDMapper();
-    DocIDTOTweetIDMapper optimizedTweetIdMapper = originalTweetIdMapper.optimize();
+    DocIDToTweetIDMapper originalTweetIdMapper = source.getDocIDToTweetIDMapper();
+    DocIDToTweetIDMapper optimizedTweetIdMapper = originalTweetIdMapper.optimize();
 
     TimeMapper optimizedTimeMapper =
         source.getTimeMapper() != null
@@ -97,8 +97,8 @@ public final class IndexOptimizer {
   private static void optimizeInvertedIndexes(
       EarlybirdRealtimeIndexSegmentData source,
       ConcurrentHashMap<String, InvertedIndex> targetMap,
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper,
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper,
       Map<Integer, int[]> termIDMapper
   ) throws IOException {
     for (Map.Entry<String, InvertedIndex> entry : source.getPerFieldMap().entrySet()) {
@@ -139,8 +139,8 @@ public final class IndexOptimizer {
       EarlybirdFieldType fieldType,
       String fieldName,
       InvertedRealtimeIndex originalIndex,
-      DocIDTOTweetIDMapper originalMapper,
-      DocIDTOTweetIDMapper optimizedMapper
+      DocIDToTweetIDMapper originalMapper,
+      DocIDToTweetIDMapper optimizedMapper
   ) throws IOException {
     Preconditions.checkState(!fieldType.isStorePerPositionPayloads());
     TermsEnum allTerms = originalIndex.createTermsEnum(originalIndex.getMaxPublishedPointer());

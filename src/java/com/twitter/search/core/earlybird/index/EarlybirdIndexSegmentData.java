@@ -92,7 +92,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
 
   private final DeletedDocs deletedDocs;
 
-  private final DocIDTOTweetIDMapper docIdToTweetIdMapper;
+  private final DocIDToTweetIDMapper DocIDToTweetIDMapper;
   private final TimeMapper timeMapper;
 
   static LeafReader getLeafReaderFromOptimizedDirectory(Directory directory) throws IOException {
@@ -119,7 +119,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
       Map<String, FacetLabelProvider> facetLabelProviders,
       FacetIDMap facetIDMap,
       DeletedDocs deletedDocs,
-      DocIDTOTweetIDMapper docIdToTweetIdMapper,
+      DocIDToTweetIDMapper DocIDToTweetIDMapper,
       TimeMapper timeMapper) {
     this.maxSegmentSize = maxSegmentSize;
     this.timeSliceID = timeSliceID;
@@ -133,7 +133,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
     this.facetLabelProviders = facetLabelProviders;
     this.facetIDMap = facetIDMap;
     this.deletedDocs = deletedDocs;
-    this.docIdToTweetIdMapper = docIdToTweetIdMapper;
+    this.DocIDToTweetIDMapper = DocIDToTweetIDMapper;
     this.timeMapper = timeMapper;
 
     Preconditions.checkNotNull(schema);
@@ -149,8 +149,8 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
    */
   public abstract <S extends EarlybirdIndexExtensionsData> S getIndexExtensionsData();
 
-  public DocIDTOTweetIDMapper getDocIDTOTweetIDMapper() {
-    return docIdToTweetIdMapper;
+  public DocIDToTweetIDMapper getDocIDToTweetIDMapper() {
+    return DocIDToTweetIDMapper;
   }
 
   public TimeMapper getTimeMapper() {
@@ -341,7 +341,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
         ConcurrentHashMap<String, InvertedIndex> perFieldMap,
         int maxSegmentSize,
         S indexExtension,
-        DocIDTOTweetIDMapper docIdToTweetIdMapper,
+        DocIDToTweetIDMapper DocIDToTweetIDMapper,
         TimeMapper timeMapper,
         DataDeserializer in) throws IOException;
 
@@ -349,13 +349,13 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
 
     protected final Schema schema;
     protected final EarlybirdIndexExtensionsFactory indexExtensionsFactory;
-    private final Flushable.Handler<? extends DocIDTOTweetIDMapper> docIdMapperFlushHandler;
+    private final Flushable.Handler<? extends DocIDToTweetIDMapper> docIdMapperFlushHandler;
     private final Flushable.Handler<? extends TimeMapper> timeMapperFlushHandler;
 
     public AbstractSegmentDataFlushHandler(
         Schema schema,
         EarlybirdIndexExtensionsFactory indexExtensionsFactory,
-        Flushable.Handler<? extends DocIDTOTweetIDMapper> docIdMapperFlushHandler,
+        Flushable.Handler<? extends DocIDToTweetIDMapper> docIdMapperFlushHandler,
         Flushable.Handler<? extends TimeMapper> timeMapperFlushHandler) {
       super();
       this.schema = schema;
@@ -377,8 +377,8 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
         throws IOException {
       EarlybirdIndexSegmentData segmentData = getObjectToFlush();
 
-      Preconditions.checkState(segmentData.docIdToTweetIdMapper instanceof Flushable);
-      ((Flushable) segmentData.docIdToTweetIdMapper).getFlushHandler().flush(
+      Preconditions.checkState(segmentData.DocIDToTweetIDMapper instanceof Flushable);
+      ((Flushable) segmentData.DocIDToTweetIDMapper).getFlushHandler().flush(
           flushInfo.newSubProperties(DOC_ID_MAPPER_SUBPROPS_NAME), out);
 
       if (segmentData.timeMapper != null) {
@@ -416,7 +416,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
     @Override
     protected EarlybirdIndexSegmentData doLoad(FlushInfo flushInfo, DataDeserializer in)
         throws IOException {
-      DocIDTOTweetIDMapper docIdToTweetIdMapper = docIdMapperFlushHandler.load(
+      DocIDToTweetIDMapper DocIDToTweetIDMapper = docIdMapperFlushHandler.load(
           flushInfo.getSubProperties(DOC_ID_MAPPER_SUBPROPS_NAME), in);
 
       FlushInfo timeMapperFlushInfo = flushInfo.getSubProperties(TIME_MAPPER_SUBPROPS_NAME);
@@ -430,7 +430,7 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
           perFieldMap,
           maxSegmentSize,
           newIndexExtension(),
-          docIdToTweetIdMapper,
+          DocIDToTweetIDMapper,
           timeMapper,
           in);
     }
@@ -469,6 +469,6 @@ public abstract class EarlybirdIndexSegmentData implements Flushable {
   }
 
   public int numDocs() {
-    return docIdToTweetIdMapper.getNumDocs();
+    return DocIDToTweetIDMapper.getNumDocs();
   }
 }

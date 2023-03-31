@@ -3,9 +3,9 @@ package com.twitter.search.earlybird.index;
 import java.io.IOException;
 
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
-public abstract class TweetIDMapper implements DocIDTOTweetIDMapper, Flushable {
+public abstract class TweetIDMapper implements DocIDToTweetIDMapper, Flushable {
   private long minTweetID;
   private long maxTweetID;
   private int minDocID;

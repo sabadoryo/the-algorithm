@@ -14,7 +14,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.TimeMapper;
 import com.twitter.search.core.earlybird.index.column.ColumnStrideFieldIndex;
 
@@ -106,8 +106,8 @@ public class DocValuesBasedTimeMapper implements TimeMapper {
   }
 
   @Override
-  public TimeMapper optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
-                             DocIDTOTweetIDMapper optimizedTweetIdMapper) {
+  public TimeMapper optimize(DocIDToTweetIDMapper originalTweetIdMapper,
+                             DocIDToTweetIDMapper optimizedTweetIdMapper) {
     // DocValuesBasedTimerMapper instances are not flushed or loaded,
     // so their optimization is a no-op.
     return this;

@@ -46,7 +46,7 @@ public final class RequiredStatusIDsFilter extends Query {
         }
 
         EarlybirdIndexSegmentAtomicReader reader = (EarlybirdIndexSegmentAtomicReader) leafReader;
-        TweetIDMapper idMapper = (TweetIDMapper) reader.getSegmentData().getDocIDTOTweetIDMapper();
+        TweetIDMapper idMapper = (TweetIDMapper) reader.getSegmentData().getDocIDToTweetIDMapper();
 
         int docIdsSize = 0;
         int[] docIds = new int[statusIDs.size()];

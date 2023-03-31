@@ -44,8 +44,8 @@ public final class EarlybirdRealtimeIndexSegmentAtomicReader
     // values for its entire lifetime, and the segment will get more tweets over time.
     // These values could be slightly out of sync with 'fields', because we don't update these
     // values atomically with the fields.
-    this.maxDocId = segmentData.getDocIDTOTweetIDMapper().getPreviousDocID(Integer.MAX_VALUE);
-    this.numDocs = segmentData.getDocIDTOTweetIDMapper().getNumDocs();
+    this.maxDocId = segmentData.getDocIDToTweetIDMapper().getPreviousDocID(Integer.MAX_VALUE);
+    this.numDocs = segmentData.getDocIDToTweetIDMapper().getNumDocs();
   }
 
   @Override

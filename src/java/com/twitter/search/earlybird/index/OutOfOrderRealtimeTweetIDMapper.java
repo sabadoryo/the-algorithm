@@ -15,7 +15,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 import it.unimi.dsi.fastutil.ints.Int2ByteOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2LongMap;
@@ -396,7 +396,7 @@ public class OutOfOrderRealtimeTweetIDMapper extends TweetIDMapper {
   }
 
   @Override
-  public DocIDTOTweetIDMapper optimize() throws IOException {
+  public DocIDToTweetIDMapper optimize() throws IOException {
     return new OptimizedTweetIDMapper(this);
   }
 

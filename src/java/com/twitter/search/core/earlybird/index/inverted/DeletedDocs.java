@@ -10,7 +10,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
@@ -37,15 +37,15 @@ public abstract class DeletedDocs implements Flushable {
    * Returns a DeletedDocs instance that has the same deleted tweet IDs, but mapped to the doc IDs
    * in the optimizedTweetIdMapper.
    *
-   * @param originalTweetIdMapper The original DocIDTOTweetIDMapper instance that was used to add
+   * @param originalTweetIdMapper The original DocIDToTweetIDMapper instance that was used to add
    *                              doc IDs to this DeletedDocs instance.
-   * @param optimizedTweetIdMapper The new DocIDTOTweetIDMapper instance.
+   * @param optimizedTweetIdMapper The new DocIDToTweetIDMapper instance.
    * @return An DeletedDocs instance that has the same tweets deleted, but mapped to the doc IDs in
    *         optimizedTweetIdMapper.
    */
   public abstract DeletedDocs optimize(
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException;
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException;
 
   public abstract class View {
     /**
@@ -144,8 +144,8 @@ public abstract class DeletedDocs implements Flushable {
     }
 
     @Override
-    public DeletedDocs optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
-                                DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+    public DeletedDocs optimize(DocIDToTweetIDMapper originalTweetIdMapper,
+                                DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
       DeletedDocs optimizedDeletedDocs = new Default(size);
       for (int deletedDocID : deletes.keySet()) {
         long tweetID = originalTweetIdMapper.getTweetID(deletedDocID);
@@ -211,8 +211,8 @@ public abstract class DeletedDocs implements Flushable {
     }
 
     @Override
-    public DeletedDocs optimize(DocIDTOTweetIDMapper originalTweetIdMapper,
-                                DocIDTOTweetIDMapper optimizedTweetIdMapper) {
+    public DeletedDocs optimize(DocIDToTweetIDMapper originalTweetIdMapper,
+                                DocIDToTweetIDMapper optimizedTweetIdMapper) {
       return this;
     }
 

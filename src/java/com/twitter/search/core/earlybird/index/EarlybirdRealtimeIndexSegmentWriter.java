@@ -120,29 +120,29 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
   @Override
   public int numDocsNoDelete() {
-    return segmentData.getDocIDTOTweetIDMapper().getNumDocs();
+    return segmentData.getDocIDToTweetIDMapper().getNumDocs();
   }
 
   @Override
   public void addDocument(Document doc) throws IOException {
     // This method should be called only from Expertsearch, not tweets Earlybirds.
-    DocIDTOTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDTOTweetIDMapper();
-    Preconditions.checkState(docIdToTweetIdMapper instanceof SequentialDocIDMapper);
+    DocIDToTweetIDMapper DocIDToTweetIDMapper = segmentData.getDocIDToTweetIDMapper();
+    Preconditions.checkState(DocIDToTweetIDMapper instanceof SequentialDocIDMapper);
 
     // Make sure we have space for a new doc in this segment.
-    Preconditions.checkState(docIdToTweetIdMapper.getNumDocs() < segmentData.getMaxSegmentSize(),
+    Preconditions.checkState(DocIDToTweetIDMapper.getNumDocs() < segmentData.getMaxSegmentSize(),
                              "Cannot add a new document to the segment, because it's full.");
 
-    addDocument(doc, docIdToTweetIdMapper.addMapping(-1L), false);
+    addDocument(doc, DocIDToTweetIDMapper.addMapping(-1L), false);
   }
 
   @Override
   public void addTweet(Document doc, long tweetId, boolean docIsOffensive) throws IOException {
-    DocIDTOTweetIDMapper docIdToTweetIdMapper = segmentData.getDocIDTOTweetIDMapper();
-    Preconditions.checkState(!(docIdToTweetIdMapper instanceof SequentialDocIDMapper));
+    DocIDToTweetIDMapper DocIDToTweetIDMapper = segmentData.getDocIDToTweetIDMapper();
+    Preconditions.checkState(!(DocIDToTweetIDMapper instanceof SequentialDocIDMapper));
 
     // Make sure we have space for a new doc in this segment.
-    Preconditions.checkState(docIdToTweetIdMapper.getNumDocs() < segmentData.getMaxSegmentSize(),
+    Preconditions.checkState(DocIDToTweetIDMapper.getNumDocs() < segmentData.getMaxSegmentSize(),
                              "Cannot add a new document to the segment, because it's full.");
 
     Preconditions.checkNotNull(doc.getField(
@@ -150,13 +150,13 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
     addAllDocsField(doc);
 
-    int docId = docIdToTweetIdMapper.addMapping(tweetId);
+    int docId = DocIDToTweetIDMapper.addMapping(tweetId);
     // Make sure we successfully assigned a doc ID to the new document/tweet before proceeding.
-    // If the docId is DocIDTOTweetIDMapper.ID_NOT_FOUND then either:
+    // If the docId is DocIDToTweetIDMapper.ID_NOT_FOUND then either:
     //  1. the tweet is older than the  OutOfOrderRealtimeTweetIDMapper.segmentBoundaryTimestamp and
     //    is too old for this segment
     //  2. the OutOfOrderRealtimeTweetIDMapper does not have any available doc ids left
-    if (docId == DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    if (docId == DocIDToTweetIDMapper.ID_NOT_FOUND) {
       LOG.info("Could not assign doc id for tweet. Dropping tweet id " + tweetId
           + " for segment with timeslice: " + segmentData.getTimeSliceID());
       NUM_TWEETS_DROPPED.increment();
@@ -605,7 +605,7 @@ public final class EarlybirdRealtimeIndexSegmentWriter extends EarlybirdIndexSeg
 
   @Override
   public int numDocs() {
-    return segmentData.getDocIDTOTweetIDMapper().getNumDocs();
+    return segmentData.getDocIDToTweetIDMapper().getNumDocs();
   }
 
   public interface InvertedDocConsumer {

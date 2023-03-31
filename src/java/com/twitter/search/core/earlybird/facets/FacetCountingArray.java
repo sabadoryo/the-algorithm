@@ -12,7 +12,7 @@ import com.twitter.search.common.util.io.flushable.DataDeserializer;
 import com.twitter.search.common.util.io.flushable.DataSerializer;
 import com.twitter.search.common.util.io.flushable.FlushInfo;
 import com.twitter.search.common.util.io.flushable.Flushable;
-import com.twitter.search.core.earlybird.index.DocIDTOTweetIDMapper;
+import com.twitter.search.core.earlybird.index.DocIDToTweetIDMapper;
 import com.twitter.search.core.earlybird.index.inverted.IntBlockPool;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
@@ -49,8 +49,8 @@ public class FacetCountingArray extends AbstractFacetCountingArray {
   @Override
   public AbstractFacetCountingArray rewriteAndMapIDs(
       Map<Integer, int[]> termIDMapper,
-      DocIDTOTweetIDMapper originalTweetIdMapper,
-      DocIDTOTweetIDMapper optimizedTweetIdMapper) throws IOException {
+      DocIDToTweetIDMapper originalTweetIdMapper,
+      DocIDToTweetIDMapper optimizedTweetIdMapper) throws IOException {
     Preconditions.checkNotNull(originalTweetIdMapper);
     Preconditions.checkNotNull(optimizedTweetIdMapper);
 
@@ -82,7 +82,7 @@ public class FacetCountingArray extends AbstractFacetCountingArray {
         try {
           long tweetId = originalTweetIdMapper.getTweetID(docID);
           int newDocId = optimizedTweetIdMapper.getDocID(tweetId);
-          Preconditions.checkState(newDocId != DocIDTOTweetIDMapper.ID_NOT_FOUND,
+          Preconditions.checkState(newDocId != DocIDToTweetIDMapper.ID_NOT_FOUND,
                                    "Did not find a mapping in the new tweet ID mapper for doc ID "
                                    + newDocId + ", tweet ID " + tweetId);
 
@@ -101,7 +101,7 @@ public class FacetCountingArray extends AbstractFacetCountingArray {
     // order). So we need to iterate here over the doc IDs in the optimized mapper, convert them
     // to doc IDs in the original mapper, and pass those doc IDs to collect().
     int docId = optimizedTweetIdMapper.getPreviousDocID(Integer.MAX_VALUE);
-    while (docId != DocIDTOTweetIDMapper.ID_NOT_FOUND) {
+    while (docId != DocIDToTweetIDMapper.ID_NOT_FOUND) {
       long tweetId = optimizedTweetIdMapper.getTweetID(docId);
       int originalDocId = originalTweetIdMapper.getDocID(tweetId);
       iterator.collect(originalDocId);

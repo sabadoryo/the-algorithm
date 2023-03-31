@@ -18,7 +18,7 @@ public class TweetSearchLuceneIndexExtensionsData implements EarlybirdIndexExten
     // we need to initialize them
     EarlybirdIndexSegmentData segmentData = atomicReader.getSegmentData();
     DocValuesBasedTweetIDMapper tweetIDMapper =
-        (DocValuesBasedTweetIDMapper) segmentData.getDocIDTOTweetIDMapper();
+        (DocValuesBasedTweetIDMapper) segmentData.getDocIDToTweetIDMapper();
     tweetIDMapper.initializeWithLuceneReader(
         atomicReader,
         getColumnStrideFieldIndex(segmentData, EarlybirdFieldConstant.ID_CSF_FIELD));
